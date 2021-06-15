@@ -526,6 +526,12 @@ M.commands = {
   ['java.action.generateDelegateMethodsPrompt'] = java_generate_delegate_methods_prompt;
 }
 
+if vim.lsp.commands then
+  for k, v in pairs(M.commands) do
+    vim.lsp.commands[k] = v
+  end
+end
+
 
 if not vim.lsp.handlers['workspace/executeClientCommand'] then
   vim.lsp.handlers['workspace/executeClientCommand'] = function(_, _, params)  -- luacheck: ignore 122

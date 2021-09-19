@@ -1,7 +1,14 @@
 local api = vim.api
-local request = vim.lsp.buf_request
 local M = {}
 
+local request = function(bufnr, method, params, handler)
+	local clients = vim.lsp.buf_get_clients(bufnr)
+	for _, client in ipairs(clients) do
+		if client.config.name == "jdt.ls" then
+			client.request(method, params, handler, bufnr)
+		end
+	end
+end
 
 function M.mk_handler(fn)
   return function(...)

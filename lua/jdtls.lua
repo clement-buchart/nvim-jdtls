@@ -26,8 +26,14 @@ local M = {
 }
 
 local request = function(bufnr, method, params, handler)
-  vim.lsp.buf_request(bufnr, method, params, util.mk_handler(handler))
+	local clients = vim.lsp.buf_get_clients(bufnr)
+	for _, client in ipairs(clients) do
+		if client.config.name == 'jdt.ls' then
+            client.request(method, params, util.mk_handler(handler), bufnr)
+		end
+	end
 end
+
 local highlight_ns = api.nvim_create_namespace('jdtls_hl')
 M.jol_path = nil
 
